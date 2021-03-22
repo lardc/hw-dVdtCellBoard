@@ -7,8 +7,7 @@
 
 // Functions
 //
-bool LL_IsBlinkLED();
-void LL_BlinkLED(bool State);
+void LL_ToggleLed();
 void LL_ExternalLED(bool State);
 
 #endif //__LOWLEVEL_H
