@@ -48,10 +48,7 @@ void TIM3_IRQHandler()
 			if (CONTROL_TimeCounter > (LED_BlinkTimeCounter + LED_BLINK_TIME))
 			{
 				//Моргаем светодиодом
-				if (!LL_IsBlinkLED())
-					LL_BlinkLED(TRUE);
-				else
-					LL_BlinkLED(FALSE);
+				LL_ToggleLed();
 
 				LED_BlinkTimeCounter = CONTROL_TimeCounter;
 			}
