@@ -1,20 +1,22 @@
-#include <InitConfig.h>
+#include "InitConfig.h"
+#include "Board.h"
 #include "SysConfig.h"
-
-// Forward functions
-//
-void CONTROL_Init();
-
+#include "Controller.h"
+#include "LowLevel.h"
+#include "Global.h"
+#include "DataTable.h"
+#include "DeviceObjectDictionary.h"
+#include "BCCIxParams.h"
 
 // Functions
 //
-Boolean SysClk_Config()
+Boolean INITCFG_ConfigSystemClock()
 {
 	return RCC_PLL_HSE_Config(QUARTZ_FREQUENCY, PREDIV_4, PLL_14);
 }
 //------------------------------------------------------------------------------
 
-void EI_Config()
+void INITCFG_ConfigEI()
 {
 	// Sync
 	EXTI_Config(EXTI_PB, EXTI_0, FALL_TRIG, 0);
@@ -22,91 +24,86 @@ void EI_Config()
 }
 //------------------------------------------------------------------------------
 
-void IO_Config()
+void INITCFG_ConfigIO()
 {
 	// Включение тактирования портов
 	RCC_GPIO_Clk_EN(PORTA);
 	RCC_GPIO_Clk_EN(PORTB);
 
 	// Аналоговые порты
-	GPIO_Config (GPIOA, Pin_0, Analog, NoPull, HighSpeed, NoPull);				// PA0 - вход АЦП (напряжение батареи)
-	GPIO_Config(GPIOA, Pin_4, Analog, NoPull, HighSpeed, NoPull);				// PA4 - выход ЦАП
+	GPIO_InitAnalog(GPIO_MEASURE_V);
+	GPIO_InitAnalog(GPIO_DAC_V);
 
 	// Цифровые входы
-	GPIO_Config(GPIOB, Pin_0, Input, NoPull, HighSpeed, NoPull);				// PB0 - START_PULSE - вход синхронизации
+	GPIO_InitInput(GPIO_SYNC_IN, NoPull);
 
 	// Выходы
-	GPIO_Config (GPIOA, Pin_5,  Output, PushPull, HighSpeed, NoPull);			// PA5 - I_LIM - смена ограничения по току в выходном каскаде
-	GPIO_Bit_Rst(GPIOA, Pin_5);
-	GPIO_Config (GPIOA, Pin_6,  Output, PushPull, HighSpeed, NoPull);			// PA6 - BRAKE_PWM - цепь разряда
-	GPIO_Bit_Rst(GPIOA, Pin_6);
-	GPIO_Config (GPIOA, Pin_15,  Output, PushPull, HighSpeed, NoPull);			// PA15 - LED1
-	GPIO_Bit_Rst(GPIOA, Pin_15);
-	GPIO_Config (GPIOB, Pin_4,  Output, PushPull, HighSpeed, NoPull);			// PB4 - LED2
-	GPIO_Bit_Rst(GPIOB, Pin_4);
+	GPIO_InitPushPullOutput(GPIO_I_LIM);
+	GPIO_SetState(GPIO_I_LIM, false);
+	GPIO_InitPushPullOutput (GPIO_BRAKE_PWM);
+	GPIO_SetState(GPIO_BRAKE_PWM, false);
+	GPIO_InitPushPullOutput (GPIO_LED1);
+	GPIO_SetState(GPIO_LED1, false);
+	GPIO_InitPushPullOutput (GPIO_LED2);
+	GPIO_SetState(GPIO_LED2, false);
 
 	// Альтернативные функции
-	GPIO_Config (GPIOB, Pin_6, AltFn, PushPull, HighSpeed, NoPull);				// PB6(USART1 TX)
-	GPIO_AltFn  (GPIOB, Pin_6, AltFn_7);
-	GPIO_Config (GPIOB, Pin_7, AltFn, PushPull, HighSpeed, NoPull);				// PB7(USART1 RX)
-	GPIO_AltFn  (GPIOB, Pin_7, AltFn_7);
-	GPIO_Config (GPIOA, Pin_2, AltFn, PushPull, HighSpeed, NoPull);				// PA2(TIM15_CH1 - PWM)
-	GPIO_AltFn  (GPIOA, Pin_2, AltFn_9);
+	GPIO_InitAltFunction(GPIO_ALT_UART_RX, AltFn_7);
+	GPIO_InitAltFunction(GPIO_ALT_UART_TX, AltFn_7);
+	GPIO_InitAltFunction(GPIO_ALT_PWM, AltFn_9);
 }
 //------------------------------------------------------------------------------
 
-void CAN_Config()
-{
-	RCC_CAN_Clk_EN(CAN_1_ClkEN);
-	NCAN_Init(SYSCLK, CAN_BAUDRATE, FALSE);
-	NCAN_FIFOInterrupt(TRUE);
-	NCAN_FilterInit(0, 0, 0);		// Фильтр 0 пропускает все сообщения
-}
-//------------------------------------------------------------------------------
-
-void UART_Config()
+void INITCFG_ConfigUART()
 {
 	USART_Init(USART1, SYSCLK, USART_BAUDRATE);
 	USART_Recieve_Interupt(USART1, 0, true);
 }
-//------------------------------------------------------------------------------
+//------------------------------------------------
 
-void ADC_Init()
+void INITCFG_ConfigADC()
 {
 	RCC_ADC_Clk_EN(ADC_12_ClkEN);
+
 	ADC_Calibration(ADC1);
 	ADC_SoftTrigConfig(ADC1);
-	ADC_ChannelSet_SampleTime(ADC1, 1, ADC_SMPL_TIME_7_5);
 	ADC_Enable(ADC1);
+
+	//ADC_Calibration(ADC1);
+	//ADC_TrigConfig(ADC1, ADC12_TIM6_TRGO, RISE);
+	//ADC_ChannelSeqReset(ADC1);
+	//ADC_ChannelSet_Sequence(ADC1, ADC_CH_V_CAP, 1);
+	//ADC_ChannelSeqLen(ADC1, 1);
+	//ADC_Enable(ADC1);
 }
 //------------------------------------------------------------------------------
 
-void Timer3_Config()
+void INITCFG_ConfigTimer3()
 {
 	TIM_Clock_En(TIM_3);
 	TIM_Config(TIM3, SYSCLK, TIMER3_uS);
-	TIM_Interupt(TIM3, 0, true);
+	TIM_Interupt(TIM3, 1, true);
 	TIM_Start(TIM3);
 }
 //------------------------------------------------------------------------------
 
-void Timer6_Config()
+void INITCFG_ConfigTimer6()
 {
 	TIM_Clock_En(TIM_6);
-	TIM_Config(TIM6, SYSCLK, TIMER3_uS);
-	TIM_Interupt(TIM6, 0, true);
-	TIM_Start(TIM6);
+	TIM_Config(TIM6, SYSCLK, TIMER6_uS);
+	TIM_DMA(TIM6, DMAEN);
+	TIM_MasterMode(TIM6, MMS_UPDATE);
 }
-//------------------------------------------------------------------------------
+//------------------------------------------------
 
-void WatchDog_Config()
+void INITCFG_ConfigWatchDog()
 {
 	IWDG_Config();
 	IWDG_ConfigureFastUpdate();
 }
 //------------------------------------------------------------------------------
 
-void PWM_Config()
+void INITCFG_ConfigPWM()
 {
 	//PA2 - Flyback PWM
 	TIM_Clock_En(TIM_15);
@@ -120,18 +117,13 @@ void PWM_Config()
 }
 //------------------------------------------------------------------------------
 
-void InitializeController(Boolean GoodClock)
-{
-	CONTROL_Init();
-}
-// -----------------------------------------------------------------------------
-
-void DAC_Config()
+void INITCFG_ConfigDAC()
 {
 	DACx_Clk_Enable(DAC_1_ClkEN);
 	DACx_Reset();
-	DAC_Trigger_Config(TRIG1_TIMER6, TRIG1_ENABLE);
-	DAC_Buff(BUFF1, false);
-	DACx_Enable(DAC1ENABLE);
+	//DAC_TriggerConfigCh1(DAC1, TRIG1_TIMER6, TRIG1_ENABLE);
+	DAC_TriggerConfigCh1(DAC1, TRIG1_SOFTWARE, TRIG1_ENABLE);
+	DAC_BufferCh1(DAC1, false);
+	DAC_EnableCh1(DAC1);
 }
 // -----------------------------------------------------------------------------

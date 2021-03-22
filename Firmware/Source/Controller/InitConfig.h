@@ -5,16 +5,15 @@
 
 //Functions
 //
-Boolean SysClk_Config();
-void EI_Config();
-void IO_Config();
-void UART_Config();
-void ADC_Init();
-void Timer3_Config();
-void Timer6_Config();
-void WatchDog_Config();
-void InitializeController(Boolean GoodClock);
-void PWM_Config();
-void DAC_Config();
+
+Boolean INITCFG_ConfigSystemClock();
+void INITCFG_ConfigEI();
+void INITCFG_ConfigIO();
+void INITCFG_ConfigUART();
+void INITCFG_ConfigADC();
+void INITCFG_ConfigTimer3();
+void INITCFG_ConfigWatchDog();
+void INITCFG_ConfigPWM();
+void INITCFG_ConfigDAC();
 
 #endif //__INITCONFIG_H
