@@ -1,6 +1,7 @@
 #include "Interrupts.h"
 #include "InitConfig.h"
 #include "SysConfig.h"
+#include "Controller.h"
 
 // Functions
 //
@@ -13,35 +14,34 @@ int main()
 	__enable_irq();
 
 	// Настройка системной частоты тактирования
-	SysClk_Config();
+	INITCFG_ConfigSystemClock();
 
 	// Настройка портов
-	IO_Config();
+	INITCFG_ConfigIO();
 
 	// Настройка ЦАП
-	DAC_Config();
+	INITCFG_ConfigDAC();
 
 	// Настройка внешних прерываний
-	EI_Config();
+	INITCFG_ConfigEI();
 
 	// Настройка UART
-	UART_Config();
+	INITCFG_ConfigUART();
 
 	// Настройка таймеров
-	Timer3_Config();
-	Timer6_Config();
+	INITCFG_ConfigTimer3();
 
 	//Настройка ШИМ
-	PWM_Config();
+	INITCFG_ConfigPWM();
 
 	// Настройка АЦП
-	//ADC_Init();
+	INITCFG_ConfigADC();
 
 	// Настройка сторожевого таймера
-	WatchDog_Config();
+	INITCFG_ConfigWatchDog();
 
 	// Инициализация логики контроллера
-	InitializeController(false);
+	CONTROL_Init();
 
 	// Фоновый цикл
 	while (TRUE)
