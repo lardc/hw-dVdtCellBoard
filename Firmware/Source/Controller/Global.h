@@ -8,7 +8,7 @@
 //--------------------------------------------------------
 #define	SCCI_TIMEOUT_TICKS				1000						// Receive timeout (in ms)
 //
-#define LED_BLINK_TIME					250
+#define LED_BLINK_TIME					500
 //
 // Capacitor voltage parameters
 #define CAP_VOLTAGE_MIN					50							// Capacitor minimum voltage (in V)
