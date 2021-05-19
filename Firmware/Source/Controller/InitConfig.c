@@ -30,28 +30,24 @@ void INITCFG_ConfigIO()
 	// Включение тактирования портов
 	RCC_GPIO_Clk_EN(PORTA);
 	RCC_GPIO_Clk_EN(PORTB);
-
+	
 	// Аналоговые порты
 	GPIO_InitAnalog(GPIO_MEASURE_V);
 	GPIO_InitAnalog(GPIO_DAC_V);
-
+	
 	// Цифровые входы
 	GPIO_InitInput(GPIO_SYNC_IN, NoPull);
-
+	
 	// Выходы
 	GPIO_InitPushPullOutput(GPIO_I_LIM);
+	GPIO_InitPushPullOutput(GPIO_LED1);
+	GPIO_InitPushPullOutput(GPIO_LED2);
+	GPIO_InitPushPullOutput(GPIO_LOW_VRATE);
+	GPIO_InitPushPullOutput(GPIO_MID_VRATE);
+	GPIO_InitPushPullOutput(GPIO_HIGH_VRATE);
+	
 	GPIO_SetState(GPIO_I_LIM, true);
-	GPIO_InitPushPullOutput (GPIO_LED1);
-	GPIO_SetState(GPIO_LED1, false);
-	GPIO_InitPushPullOutput (GPIO_LED2);
-	GPIO_SetState(GPIO_LED2, false);
-	GPIO_InitPushPullOutput(GPIO_LOW_RATE_CHNNL);
-	GPIO_SetState(GPIO_LOW_RATE_CHNNL, false);
-	GPIO_InitPushPullOutput (GPIO_MID_RATE_CHNNL);
-	GPIO_SetState(GPIO_MID_RATE_CHNNL, false);
-	GPIO_InitPushPullOutput (GPIO_HIGH_RATE_CHNNL);
-	GPIO_SetState(GPIO_HIGH_RATE_CHNNL, false);
-
+	
 	// Альтернативные функции
 	GPIO_InitAltFunction(GPIO_ALT_UART_RX, AltFn_7);
 	GPIO_InitAltFunction(GPIO_ALT_UART_TX, AltFn_7);
@@ -70,14 +66,14 @@ void INITCFG_ConfigUART()
 void INITCFG_ConfigADC()
 {
 	RCC_ADC_Clk_EN(ADC_12_ClkEN);
-
+	
 	ADC_Calibration(ADC1);
 	ADC_SoftTrigConfig(ADC1);
 	ADC_ChannelSeqReset(ADC1);
-
-	for (uint8_t i = 1; i <= ADC_DMA_BUFF_SIZE; ++i)
+	
+	for(uint8_t i = 1; i <= ADC_DMA_BUFF_SIZE; ++i)
 		ADC_ChannelSet_Sequence(ADC1, ADC1_V_BAT_CHANNEL, i);
-
+	
 	ADC_ChannelSeqLen(ADC1, ADC_DMA_BUFF_SIZE);
 	ADC_DMAConfig(ADC1);
 	ADC_Enable(ADC1);
@@ -87,13 +83,13 @@ void INITCFG_ConfigADC()
 void INITCFG_ConfigDMA()
 {
 	DMA_Clk_Enable(DMA1_ClkEN);
-
+	
 	// DMA для АЦП напряжения батареи
-
 	DMA_Reset(DMA_ADC_V_BAT_CHANNEL);
 	DMAChannelX_Config(DMA_ADC_V_BAT_CHANNEL, DMA_MEM2MEM_DIS, DMA_LvlPriority_LOW, DMA_MSIZE_16BIT, DMA_PSIZE_16BIT,
-							DMA_MINC_EN, DMA_PINC_DIS, DMA_CIRCMODE_EN, DMA_READ_FROM_PERIPH);
-	DMAChannelX_DataConfig(DMA_ADC_V_BAT_CHANNEL, (uint32_t)(&MEASURE_ADC_BatteryVoltageRaw[0]), (uint32_t)(&ADC1->DR), ADC_DMA_BUFF_SIZE);
+			DMA_MINC_EN, DMA_PINC_DIS, DMA_CIRCMODE_EN, DMA_READ_FROM_PERIPH);
+	DMAChannelX_DataConfig(DMA_ADC_V_BAT_CHANNEL, (uint32_t)(&MEASURE_ADC_BatteryVoltageRaw[0]), (uint32_t)(&ADC1->DR),
+			ADC_DMA_BUFF_SIZE);
 	DMA_ChannelEnable(DMA_ADC_V_BAT_CHANNEL, true);
 }
 //------------------------------------------------------------------------------
@@ -138,7 +134,7 @@ void INITCFG_ConfigPWM()
 	TIM15_16_17_PWM_CH1_Config(TIM15, SYSCLK, TIMER15_uS);
 	TIM15->CCER &= PWM_OUT_LOW_POL;
 	TIM_Start(TIM15);
-
+	
 	//PA6 - Brake PWM
 	TIM_Clock_En(TIM_16);
 	TIM15_16_17_PWM_CH1_Config(TIM16, SYSCLK, TIMER16_uS);

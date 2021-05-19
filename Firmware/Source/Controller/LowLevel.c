@@ -2,43 +2,58 @@
 #include "LowLevel.h"
 #include "Board.h"
 
+// Forward functions
+//
+void LL_VRateSelect(bool LowEnable, bool MidEnable, bool HighEnable);
+
 // Functions
 //
-// LED on board
 void LL_ToggleLed()
 {
 	GPIO_Toggle(GPIO_LED2);
 }
 //-----------------------------
 
-// External LED
 void LL_ExternalLED(bool State)
 {
 	GPIO_SetState(GPIO_LED1, State);
 }
 //-----------------------------
 
-// I_LIM
-void LL_SW_I_LIM(bool State)
+void LL_CurrentLimitEnable(bool State)
 {
-	GPIO_SetState(GPIO_I_LIM, State);
+	GPIO_SetState(GPIO_I_LIM, !State);
 }
 //-----------------------------
 
-void LL_SW_LOW_RATE_CHNNL(bool State)
+void LL_VRateSelect(bool LowEnable, bool MidEnable, bool HighEnable)
 {
-	GPIO_SetState(GPIO_LOW_RATE_CHNNL, State);
+	GPIO_SetState(GPIO_LOW_VRATE, LowEnable);
+	GPIO_SetState(GPIO_MID_VRATE, MidEnable);
+	GPIO_SetState(GPIO_HIGH_VRATE, HighEnable);
 }
 //-----------------------------
 
-void LL_SW_MID_RATE_CHNNL(bool State)
+void LL_VRateLow()
 {
-	GPIO_SetState(GPIO_MID_RATE_CHNNL, State);
+	LL_VRateSelect(true, false, false);
 }
 //-----------------------------
 
-void LL_SW_HIGH_RATE_CHNNL(bool State)
+void LL_VRateMid()
 {
-	GPIO_SetState(GPIO_HIGH_RATE_CHNNL, State);
+	LL_VRateSelect(false, true, false);
+}
+//-----------------------------
+
+void LL_VRateHigh()
+{
+	LL_VRateSelect(false, false, true);
+}
+//-----------------------------
+
+void LL_VRateNone()
+{
+	LL_VRateSelect(false, false, false);
 }
 //-----------------------------
