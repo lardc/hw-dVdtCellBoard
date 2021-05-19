@@ -10,11 +10,23 @@
 //
 #define LED_BLINK_TIME					500
 //
+
+// RATE LIM
+#define LOW_RATE						6000//1000
+#define MID_RATE						7000//1800//2640
+#define HIGH_RATE						5000//4700
+
+// TIM mask
+#define PWM_OUT_LOW_POL					0xFFFD
+
 // Capacitor voltage parameters
 #define CAP_VOLTAGE_MIN					50							// Capacitor minimum voltage (in V)
 #define CAP_VOLTAGE_MAX					900							// Capacitor maximum voltage (in V)
-#define ANALOG_REF_MV					5000						// (in mV)
-#define ANALOG_REF_V					5							// (in V)
+#define ANALOG_REF_MV					3300						// (in mV)
+#define ANALOG_REF_V					3							// (in V)
+#define ADC_RESOLUTION					4095
+// ADC Channels
+#define ADC_CH_V_CAP					1
 //
 #define CAP_V_K							205							// Resistive chain divisor 1/CAP_V_K
 #define CAP_V_RSHIFT					10							// div 1024
@@ -43,13 +55,11 @@
 #define FB_BASE_PWM_ZONE_SIZE			((FB_BASE_PWM_HIGH - FB_BASE_PWM_LOW) / (FB_BASE_PWM_ZONES - 1))
 #define BRK_BASE_PWM					200							// (in ticks)
 //
-// DAC = Vg * GATE_DAC_MAX / (Vref * Kgain)
-// DAC = Vg * Kn / Kd
 #define GATE_GAIN						1							// Output op-amp gain
 #define GATE_V_N						GATE_DAC_MAX
 #define GATE_V_D						(ANALOG_REF_MV * GATE_GAIN)
 //
-#define GATE_DAC_MAX					0x3ff						// DAC = 0..1023
+#define GATE_DAC_MAX					0x0FFF						// DAC = 0..4095
 //
 #define GATE_VOLTAGE_MIN				0							// (in mV)
 #define GATE_VOLTAGE_MAX				(ANALOG_REF_MV * GATE_GAIN)	// (in mV)
