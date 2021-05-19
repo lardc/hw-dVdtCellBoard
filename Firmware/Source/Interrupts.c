@@ -19,6 +19,16 @@ volatile Int64U LED_BlinkTimeCounter = 0;
 //
 void EXTI0_IRQHandler()
 {
+	if(!(GPIO_GetState(GPIO_SYNC_IN)))
+	{
+		LL_ExternalLED(true);
+		TIM_Start(TIM7);
+	}
+	else
+	{
+		LL_ExternalLED(false);
+		LL_SW_I_LIM(true);
+	}
 	EXTI_FlagReset(EXTI_0);
 }
 //-----------------------------------------
@@ -54,8 +64,20 @@ void TIM3_IRQHandler()
 			}
 		}
 
+		ADC_SamplingStart(ADC1);
 		CONTROL_Cycle();
 		TIM_StatusClear(TIM3);
 	}
 }
 //-----------------------------------------
+
+void TIM7_IRQHandler()
+{
+	if (TIM_StatusCheck(TIM7))
+	{
+		LL_SW_I_LIM(false);
+	}
+
+	TIM_Stop(TIM7);
+	TIM_StatusClear(TIM7);
+}
