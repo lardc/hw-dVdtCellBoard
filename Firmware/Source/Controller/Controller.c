@@ -11,7 +11,6 @@
 
 // Variables
 //
-volatile long CONTROL_TimeCounterTemp = 0;
 volatile long CONTROL_TimeCounter = 0;
 volatile DeviceState CONTROL_State = DS_None;
 static volatile Boolean Locked = false;

@@ -1,4 +1,3 @@
-#include "Interrupts.h"
 #include "InitConfig.h"
 #include "SysConfig.h"
 #include "Controller.h"

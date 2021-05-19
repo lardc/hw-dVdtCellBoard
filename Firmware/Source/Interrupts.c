@@ -1,19 +1,10 @@
 // Include
-#include "Interrupts.h"
-//
-#include <InitConfig.h>
-#include "stm32f30x.h"
 #include "stdinc.h"
-#include "DataTable.h"
 #include "Controller.h"
-#include "DeviceProfile.h"
 #include "LowLevel.h"
 #include "Board.h"
+#include "Global.h"
 #include "SysConfig.h"
-
-// Variables
-//
-volatile Int64U LED_BlinkTimeCounter = 0;
 
 // Functions
 //
@@ -27,7 +18,7 @@ void EXTI0_IRQHandler()
 	else
 	{
 		LL_ExternalLED(false);
-		LL_SW_I_LIM(true);
+		LL_CurrentLimitEnable(false);
 	}
 	EXTI_FlagReset(EXTI_0);
 }
@@ -35,7 +26,7 @@ void EXTI0_IRQHandler()
 
 void USART1_IRQHandler()
 {
-	if (ZwSCI_RecieveCheck(USART1))
+	if(ZwSCI_RecieveCheck(USART1))
 	{
 		ZwSCI_RegisterToFIFO(USART1);
 		ZwSCI_RecieveFlagClear(USART1);
@@ -45,25 +36,22 @@ void USART1_IRQHandler()
 
 void TIM3_IRQHandler()
 {
-	if (TIM_StatusCheck(TIM3))
+	static uint16_t CounterTmp = 0, CounterLed = 0;
+
+	if(TIM_StatusCheck(TIM3))
 	{
-		CONTROL_TimeCounterTemp++;
-
-		if(CONTROL_TimeCounterTemp>=(1/TIMER3_uS*1000))
+		if(++CounterTmp >= (1000 / TIMER3_uS))
 		{
-			CONTROL_TimeCounterTemp = 0;
-
+			CounterTmp = 0;
 			CONTROL_TimeCounter++;
-
-			if (CONTROL_TimeCounter > (LED_BlinkTimeCounter + LED_BLINK_TIME))
+			
+			if(++CounterLed >= LED_BLINK_TIME)
 			{
-				//Моргаем светодиодом
 				LL_ToggleLed();
-
-				LED_BlinkTimeCounter = CONTROL_TimeCounter;
+				CounterLed = 0;
 			}
 		}
-
+		
 		ADC_SamplingStart(ADC1);
 		CONTROL_Cycle();
 		TIM_StatusClear(TIM3);
@@ -73,11 +61,10 @@ void TIM3_IRQHandler()
 
 void TIM7_IRQHandler()
 {
-	if (TIM_StatusCheck(TIM7))
-	{
-		LL_SW_I_LIM(false);
-	}
-
+	if(TIM_StatusCheck(TIM7))
+		LL_CurrentLimitEnable(true);
+	
 	TIM_Stop(TIM7);
 	TIM_StatusClear(TIM7);
 }
+//-----------------------------------------
