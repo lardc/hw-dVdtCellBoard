@@ -75,7 +75,6 @@ void DEVPROFILE_Init(xCCI_FUNC_CallbackAction SpecializedDispatch, Boolean* Mask
 		DATA_TABLE_SIZE, SCCI_TIMEOUT_TICKS, 0);
 	// Set write protection
 	SCCI_AddProtectedArea(&DEVICE_RS232_Interface, DATA_TABLE_WP_START, DATA_TABLE_SIZE - 1);
-
 }
 // ----------------------------------------
 

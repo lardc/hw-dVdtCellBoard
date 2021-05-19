@@ -6,7 +6,6 @@
 #include "Global.h"
 #include "DataTable.h"
 #include "DeviceObjectDictionary.h"
-#include "BCCIxParams.h"
 #include "Measurement.h"
 
 // Functions

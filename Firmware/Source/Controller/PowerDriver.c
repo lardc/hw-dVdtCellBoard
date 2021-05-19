@@ -60,51 +60,15 @@ void DRIVER_CacheVariables()
 
 void DRIVER_SW_RateChannel(Int16U Voltage)
 {
-	LL_SW_LOW_RATE_CHNNL(false);
-	LL_SW_MID_RATE_CHNNL(false);
-	LL_SW_HIGH_RATE_CHNNL(false);
-
-	//if (Voltage <= LOW_RATE)
-	//{
-	//	LL_SW_LOW_RATE_CHNNL(true);
-	//	LL_SW_MID_RATE_CHNNL(false);
-	//	LL_SW_HIGH_RATE_CHNNL(false);
-	//}
-
-	//else if (Voltage <= MID_RATE)
-	//{
-	//	LL_SW_LOW_RATE_CHNNL(false);
-	//	LL_SW_MID_RATE_CHNNL(true);
-	//	LL_SW_HIGH_RATE_CHNNL(false);
-	//}
-
-	//else
-	//{
-		LL_SW_LOW_RATE_CHNNL(false);
-		LL_SW_MID_RATE_CHNNL(false);
-		LL_SW_HIGH_RATE_CHNNL(true);
-	//}
+	//
 }
 
 void DRIVER_SetGateVoltage(Int16U Voltage)
 {
-	Int16U val;
-	Int16U result;
-
-	//if (Voltage <= LOW_RATE)
-	//{
-	//	val = (Int16U)((float)Voltage / LOW_RATE * ANALOG_REF_MV);
-	//}
-	//else if (Voltage <= MID_RATE)
-	//{
-	//	val = (Int16U)((float)Voltage / MID_RATE * ANALOG_REF_MV);
-	//}
-	//else
-	//{
-		val = (Int16U)((float)Voltage / HIGH_RATE * ANALOG_REF_MV);
-	//}
+	Int16U result = 0;
 	
-	result = (((Int16U)val) * GATE_V_N) / GATE_V_D;
+	//val = (Int16U)((float)Voltage / HIGH_RATE * ANALOG_REF_MV);
+	//result = (((Int16U)val) * GATE_V_N) / GATE_V_D;
 
 	// Saturate value
 	if(result > GATE_DAC_MAX) result = GATE_DAC_MAX;
@@ -210,5 +174,3 @@ void BrakePWMSet(uint16_t PWM_Value)
 {
 	TIM15_16_17_PWM_CH1_SetValue(TIM16, PWM_Value);
 }
-
-// No more.
