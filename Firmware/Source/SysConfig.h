@@ -14,21 +14,24 @@
 // ----------------------------------------------
 
 // USART
-//#define USART_BAUDRATE				115200		// Скорость USART
 #define USART_BAUDRATE					78125		// Скорость USART
 #define USART_FIFOlen					32			// Длина FIFO USART
 // ----------------------------------------------
 
 // Timers
-#define TIMER3_uS						1000		// Период работы таймера 3
+#define TIMER3_uS						200			// Период работы таймера 3
 #define TIMER6_uS						10			// Период работы таймера 6
+#define TIMER7_uS						14			// Период работы таймера 6
 #define TIMER15_uS						10			// Период работы таймера 15
 #define TIMER16_uS						10			// Период работы таймера 16
 // ----------------------------------------------
 
-// ADC Channels
-#define ADC_CH_V_CAP					1
+// ADC
+#define DMA_ADC_V_BAT_CHANNEL			DMA1_Channel1	// Канал DMA для АЦП напряжения батареи
+#define ADC1_V_BAT_CHANNEL				1				// АЦП1 номер канала напряжения
+#define ADC_DMA_BUFF_SIZE				10				// Количество данных для DMA
 // ----------------------------------------------
+
 
 
 #endif // __SYSCONFIG_H
