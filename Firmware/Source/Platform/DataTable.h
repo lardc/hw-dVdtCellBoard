@@ -11,7 +11,6 @@
 #include "DeviceObjectDictionary.h"
 #include "DeviceProfile.h"
 
-
 // Constants
 //
 #define DATA_TABLE_SIZE				32
@@ -20,7 +19,6 @@
 #define DATA_TABLE_NV_START			0
 #define DATA_TABLE_WR_START			1
 #define DATA_TABLE_WP_START			DATA_TABLE_SIZE
-
 
 /*
  * DATA TABLE START 				------------- 0
@@ -35,7 +33,6 @@
  * DATA TABLE END 					------------- [32]
  */
 
-
 // Types
 //
 typedef void (*FUNC_SetDefaultValues)();
@@ -48,11 +45,9 @@ typedef struct __EPROMServiceConfig
 	FUNC_EPROM_ReadValues ReadService;
 } EPROMServiceConfig, *pERPOMServiceConfig;
 
-
 // Variables
 //
 extern volatile Int16U DataTable[DATA_TABLE_SIZE];
-
 
 // Functions
 //
@@ -66,7 +61,5 @@ void DT_SaveNVPartToEPROM();
 void DT_ResetNVPart(FUNC_SetDefaultValues SetFunc);
 // Reset volatile read-write part of data table
 void DT_ResetWRPart(FUNC_SetDefaultValues SetFunc);
-
-void DT_ResetNVPartToDefault(void);
 
 #endif // __DATA_TABLE_H

@@ -21,22 +21,22 @@ volatile Int16U DataTable[DATA_TABLE_SIZE];
 void DT_Init()
 {
 	Int16U i;
-
-	for (i = 0; i < DATA_TABLE_SIZE; ++i)
+	
+	for(i = 0; i < DATA_TABLE_SIZE; ++i)
 		DataTable[i] = 0;
 }
 // ----------------------------------------
 
 void DT_RestoreNVPartFromEPROM()
 {
-	if (EPROMServiceCfg.ReadService)
+	if(EPROMServiceCfg.ReadService)
 		EPROMServiceCfg.ReadService(DT_EPROM_ADDRESS, (pInt16U)&DataTable[DATA_TABLE_NV_START], DATA_TABLE_NV_SIZE);
 }
 // ----------------------------------------
 
 void DT_SaveNVPartToEPROM()
 {
-	if (EPROMServiceCfg.WriteService)
+	if(EPROMServiceCfg.WriteService)
 		EPROMServiceCfg.WriteService(DT_EPROM_ADDRESS, (pInt16U)&DataTable[DATA_TABLE_NV_START], DATA_TABLE_NV_SIZE);
 }
 // ----------------------------------------
@@ -44,11 +44,11 @@ void DT_SaveNVPartToEPROM()
 void DT_ResetNVPart(FUNC_SetDefaultValues SetFunc)
 {
 	Int16U i;
-
-	for (i = DATA_TABLE_NV_START; i < (DATA_TABLE_NV_SIZE + DATA_TABLE_NV_START); ++i)
+	
+	for(i = DATA_TABLE_NV_START; i < (DATA_TABLE_NV_SIZE + DATA_TABLE_NV_START); ++i)
 		DataTable[i] = 0;
-
-	if (SetFunc)
+	
+	if(SetFunc)
 		SetFunc();
 }
 // ----------------------------------------
@@ -56,20 +56,11 @@ void DT_ResetNVPart(FUNC_SetDefaultValues SetFunc)
 void DT_ResetWRPart(FUNC_SetDefaultValues SetFunc)
 {
 	Int16U i;
-
-	for (i = DATA_TABLE_WR_START; i < DATA_TABLE_WP_START; ++i)
+	
+	for(i = DATA_TABLE_WR_START; i < DATA_TABLE_WP_START; ++i)
 		DataTable[i] = 0;
-
-	if (SetFunc)
+	
+	if(SetFunc)
 		SetFunc();
 }
 //-------------------------------------------
-
-void DT_ResetNVPartToDefault(void)
-{
-	DEVPROFILE_FillNVPartDefault();
-
-	if (EPROMServiceCfg.WriteService)
-		EPROMServiceCfg.WriteService(DT_EPROM_ADDRESS, (pInt16U)&DataTable[DATA_TABLE_NV_START], DATA_TABLE_NV_SIZE);
-}
-//------------------------------------------
