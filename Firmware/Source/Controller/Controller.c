@@ -5,6 +5,7 @@
 #include "DataTable.h"
 #include "DeviceObjectDictionary.h"
 #include "DeviceProfile.h"
+#include "LowLevel.h"
 #include "PowerDriver.h"
 #include "Board.h"
 
@@ -49,6 +50,7 @@ void CONTROL_Cycle()
 
 static void CONTROL_ApplyParameters()
 {
+	DRIVER_SW_RateChannel(DataTable[REG_DESIRED_GATE_V]);
 	DRIVER_SetGateVoltage(DataTable[REG_DESIRED_GATE_V]);
 	DRIVER_CacheVariables();
 }
@@ -70,6 +72,10 @@ static void CONTROL_FillDefault()
 	DataTable[REG_DESIRED_GATE_V] = 0;
 	
 	DataTable[REG_VOLTAGE_FINE_N] = (1 << CAP_VF_RSHIFT);
+
+	DataTable[REG_ADC_VBAT_OFFSET] = 65534;
+	DataTable[REG_ADC_VBAT_N] = 319;
+	DataTable[REG_ADC_VBAT_D] = 1000;
 }
 
 static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U UserError)
@@ -97,7 +103,28 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U UserError)
 			//PSC_PWMUpdate(DataTable[REG_DIAG_PWM_FREQ]);
 			break;
 		case ACT_DIAG_SET_GATE_V:
+			DRIVER_SW_RateChannel(DataTable[REG_DESIRED_GATE_V]);
 			DRIVER_SetGateVoltage(DataTable[REG_DESIRED_GATE_V]);
+			break;
+		case ACT_DIAG_SW_LOW_RATE:
+			LL_SW_LOW_RATE_CHNNL(true);
+			LL_SW_MID_RATE_CHNNL(false);
+			LL_SW_HIGH_RATE_CHNNL(false);
+			break;
+		case ACT_DIAG_SW_MID_RATE:
+			LL_SW_LOW_RATE_CHNNL(false);
+			LL_SW_MID_RATE_CHNNL(true);
+			LL_SW_HIGH_RATE_CHNNL(false);
+			break;
+		case ACT_DIAG_SW_HIGH_RATE:
+			LL_SW_LOW_RATE_CHNNL(false);
+			LL_SW_MID_RATE_CHNNL(false);
+			LL_SW_HIGH_RATE_CHNNL(true);
+			break;
+		case ACT_DIAG_SW_OFF_RATE:
+			LL_SW_LOW_RATE_CHNNL(false);
+			LL_SW_MID_RATE_CHNNL(false);
+			LL_SW_HIGH_RATE_CHNNL(false);
 			break;
 		case ACT_CLR_FAULT:
 			if(CONTROL_State == DS_Fault)
