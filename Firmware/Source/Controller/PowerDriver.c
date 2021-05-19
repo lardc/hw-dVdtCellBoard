@@ -8,6 +8,8 @@
 #include "Global.h"
 #include "Board.h"
 #include "SysConfig.h"
+#include "Measurement.h"
+#include "LowLevel.h"
 
 // Variables
 //
@@ -18,6 +20,7 @@ static char ErrorLimit = CAP_V_DEADZONE_MIN_V;
 static char AcceptableWindow = CAP_V_WINDOW_MIN_V;
 static Int16U Correction = (1 << CAP_VF_RSHIFT);
 static Int16U DesiredVoltage = CAP_VOLTAGE_MIN;
+
 
 // Forward functions
 char DRIVER_CalculateVoltageSaturated(Int8U Percent, Int8U LowSat, Int8U HighSat);
@@ -55,28 +58,69 @@ void DRIVER_CacheVariables()
 	DesiredVoltage = DRIVER_ValueSaturate(DataTable[REG_DESIRED_VOLTAGE], CAP_VOLTAGE_MIN, CAP_VOLTAGE_MAX);
 }
 
+void DRIVER_SW_RateChannel(Int16U Voltage)
+{
+	LL_SW_LOW_RATE_CHNNL(false);
+	LL_SW_MID_RATE_CHNNL(false);
+	LL_SW_HIGH_RATE_CHNNL(false);
+
+	//if (Voltage <= LOW_RATE)
+	//{
+	//	LL_SW_LOW_RATE_CHNNL(true);
+	//	LL_SW_MID_RATE_CHNNL(false);
+	//	LL_SW_HIGH_RATE_CHNNL(false);
+	//}
+
+	//else if (Voltage <= MID_RATE)
+	//{
+	//	LL_SW_LOW_RATE_CHNNL(false);
+	//	LL_SW_MID_RATE_CHNNL(true);
+	//	LL_SW_HIGH_RATE_CHNNL(false);
+	//}
+
+	//else
+	//{
+		LL_SW_LOW_RATE_CHNNL(false);
+		LL_SW_MID_RATE_CHNNL(false);
+		LL_SW_HIGH_RATE_CHNNL(true);
+	//}
+}
+
 void DRIVER_SetGateVoltage(Int16U Voltage)
 {
-	Int16U val = (((Int16U)Voltage) * GATE_V_N) / GATE_V_D;
+	Int16U val;
+	Int16U result;
+
+	//if (Voltage <= LOW_RATE)
+	//{
+	//	val = (Int16U)((float)Voltage / LOW_RATE * ANALOG_REF_MV);
+	//}
+	//else if (Voltage <= MID_RATE)
+	//{
+	//	val = (Int16U)((float)Voltage / MID_RATE * ANALOG_REF_MV);
+	//}
+	//else
+	//{
+		val = (Int16U)((float)Voltage / HIGH_RATE * ANALOG_REF_MV);
+	//}
 	
+	result = (((Int16U)val) * GATE_V_N) / GATE_V_D;
+
 	// Saturate value
-	if(val > GATE_DAC_MAX) val = GATE_DAC_MAX;
+	if(result > GATE_DAC_MAX) result = GATE_DAC_MAX;
 
 	// Set gate voltage
-	DAC_SetValueCh1(DAC1, val);
+	DAC_SetValueCh1(DAC1, result);
 }
 
 void DRIVER_ControlRoutine()
 {
 	Int16U pwm_fb, ActualVoltage;
 	Int8U pwm_fb_sleep;
-	Int16U capV, res;
+	float capV;
 
-	res = ADC_Measure(ADC1, ADC_CH_V_CAP);
-	
-	capV = ((res * CAP_V_K) * ANALOG_REF_V) >> CAP_V_RSHIFT;
-	capV = (capV * Correction) >> CAP_VF_RSHIFT;
-	DataTable[REG_ACTUAL_VOLTAGE] = capV;
+	capV = MEASURE_SingleSampleBatteryVoltage();
+	DataTable[REG_ACTUAL_VOLTAGE] = (Int16U)capV;
 	ActualVoltage = capV;
 
 	if(Active)

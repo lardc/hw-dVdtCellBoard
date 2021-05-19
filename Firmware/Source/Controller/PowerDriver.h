@@ -24,6 +24,8 @@ Int16U DRIVER_CalculateVoltageByRate(Int16U Rate);
 void DRIVER_ControlRoutine();
 // Cache variables
 void DRIVER_CacheVariables();
+//
+void DRIVER_SW_RateChannel(Int16U Voltage);
 // Set flyback PWM
 void FlybackPWMSet(uint16_t PWM_Value);
 // Set Brake PWM
