@@ -4,6 +4,7 @@
 //
 #include "DataTable.h"
 #include "DeviceObjectDictionary.h"
+#include "Constraints.h"
 #include "DeviceProfile.h"
 #include "LowLevel.h"
 #include "PowerDriver.h"
@@ -68,16 +69,14 @@ static void CONTROL_FillDefault()
 	DataTable[REG_DISABLE_REASON] = DISABLE_NONE;
 	DataTable[REG_WARNING] = WARNING_NONE;
 	
-	DataTable[REG_DESIRED_VOLTAGE] = CAP_VOLTAGE_MIN;
-	DataTable[REG_DESIRED_GATE_V] = 0;
-	
-	DataTable[REG_VOLTAGE_FINE_N] = 1 << CAP_VF_RSHIFT;
+	DataTable[REG_DESIRED_VOLTAGE] = CAP_VOLTAGE_DEF;
+	DataTable[REG_DESIRED_GATE_V] = GATE_VOLTAGE_DEF;
 }
 //-----------------------------
 
 static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U UserError)
 {
-	switch (ActionID)
+	switch(ActionID)
 	{
 		case ACT_ENABLE_POWER:
 			DataTable[REG_DESIRED_VOLTAGE] = CAP_VOLTAGE_MIN;

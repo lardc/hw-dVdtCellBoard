@@ -15,16 +15,11 @@
 #define PWM_OUT_LOW_POL					0xFFFD
 
 // Capacitor voltage parameters
-#define CAP_VOLTAGE_MIN					50		// Capacitor minimum voltage (in V)
-#define CAP_VOLTAGE_MAX					900		// Capacitor maximum voltage (in V)
 #define ANALOG_REF_MV					3300	// (in mV)
 #define ADC_RESOLUTION					4095
 
 // Fine tuning
 #define CAP_V_CONV						0.319f
-#define CAP_VF_N_MAX					1300
-#define CAP_VF_N_MIN					700
-#define CAP_VF_RSHIFT					10		// div 1024
 
 // Regulator parameters
 #define CAP_V_DEADZONE					2		// Regulator dead zone (in %)

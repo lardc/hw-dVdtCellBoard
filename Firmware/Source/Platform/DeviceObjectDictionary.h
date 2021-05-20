@@ -23,7 +23,7 @@
 //
 #define REG_DESIRED_VOLTAGE			1	// Desired cell voltage
 #define REG_DESIRED_GATE_V			2   // Desired gate voltage
-#define	REG_VOLTAGE_FINE_N			3	// Voltage coefficient N (D = 1024)
+#define	REG_VOLTAGE_FINE_N_DUMMY	3	// Voltage coefficient N (D = 1024) (not used)
 #define	REG_VRATE_RANGE				4	// Voltage rate selector
 //
 #define REG_DEV_STATE				10	// Device state

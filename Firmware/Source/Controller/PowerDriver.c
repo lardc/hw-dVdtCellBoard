@@ -19,10 +19,8 @@
 static bool Shutdown = false;
 static volatile bool Active = false;
 static volatile bool hystOn = false;
-static char ErrorLimit = CAP_V_DEADZONE_MIN_V;
-static char AcceptableWindow = CAP_V_WINDOW_MIN_V;
-static Int16U Correction = 1 << CAP_VF_RSHIFT;
-static Int16U DesiredVoltage = CAP_VOLTAGE_MIN;
+static char ErrorLimit, AcceptableWindow;
+static Int16U DesiredVoltage;
 
 // Forward functions
 char DRIVER_CalculateVoltageSaturated(Int8U Percent, Int8U LowSat, Int8U HighSat);
@@ -60,8 +58,7 @@ void DRIVER_CacheVariables()
 	ErrorLimit = DRIVER_CalculateVoltageSaturated(CAP_V_DEADZONE, CAP_V_DEADZONE_MIN_V, CAP_V_DEADZONE_MAX_V);
 	AcceptableWindow = DRIVER_CalculateVoltageSaturated(CAP_V_WINDOW, CAP_V_WINDOW_MIN_V, CAP_V_WINDOW_MAX_V);
 	
-	Correction = DRIVER_ValueSaturate(DataTable[REG_VOLTAGE_FINE_N], CAP_VF_N_MIN, CAP_VF_N_MAX);
-	DesiredVoltage = DRIVER_ValueSaturate(DataTable[REG_DESIRED_VOLTAGE], CAP_VOLTAGE_MIN, CAP_VOLTAGE_MAX);
+	DesiredVoltage = DataTable[REG_DESIRED_VOLTAGE];
 }
 //-----------------------------
 
