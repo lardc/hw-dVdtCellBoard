@@ -49,8 +49,7 @@ void CONTROL_Cycle()
 
 static void CONTROL_ApplyParameters()
 {
-	DRIVER_SW_RateChannel(DataTable[REG_DESIRED_GATE_V]);
-	DRIVER_SetGateVoltage(DataTable[REG_DESIRED_GATE_V]);
+	DRIVER_GatePrepare();
 	DRIVER_CacheVariables();
 }
 //-----------------------------
@@ -105,8 +104,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U UserError)
 			break;
 			
 		case ACT_DIAG_SET_GATE_V:
-			DRIVER_SW_RateChannel(DataTable[REG_DESIRED_GATE_V]);
-			DRIVER_SetGateVoltage(DataTable[REG_DESIRED_GATE_V]);
+			DRIVER_GatePrepare();
 			break;
 			
 		case ACT_DIAG_SW_LOW_RATE:

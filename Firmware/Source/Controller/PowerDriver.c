@@ -2,52 +2,58 @@
 #include "PowerDriver.h"
 //
 #include <stdlib.h>
-//
-#include "../Platform/DeviceObjectDictionary.h"
-#include "../Platform/DataTable.h"
+#include "DeviceObjectDictionary.h"
+#include "DataTable.h"
 #include "Global.h"
 #include "Board.h"
 #include "SysConfig.h"
 #include "Measurement.h"
 #include "LowLevel.h"
 
+// Definitions
+#define VRATE_INDEX_LOW		1
+#define VRATE_INDEX_MID		2
+#define VRATE_INDEX_HIGH	0
+
 // Variables
-//
-static bool Shutdown = FALSE;
-static volatile bool Active = FALSE;
-static volatile bool hystOn = FALSE;
+static bool Shutdown = false;
+static volatile bool Active = false;
+static volatile bool hystOn = false;
 static char ErrorLimit = CAP_V_DEADZONE_MIN_V;
 static char AcceptableWindow = CAP_V_WINDOW_MIN_V;
-static Int16U Correction = (1 << CAP_VF_RSHIFT);
+static Int16U Correction = 1 << CAP_VF_RSHIFT;
 static Int16U DesiredVoltage = CAP_VOLTAGE_MIN;
-
 
 // Forward functions
 char DRIVER_CalculateVoltageSaturated(Int8U Percent, Int8U LowSat, Int8U HighSat);
 Int16U DRIVER_ValueSaturate(Int16U Var, Int16U LowSat, Int16U HighSat);
+void DRIVER_SelectVRateChannel(Int16U Channel);
+void DRIVER_SetGateVoltage(Int16U Voltage);
 
 // Functions
-//
 void DRIVER_SetMode(bool Activate)
 {
 	Active = Activate;
 }
+//-----------------------------
 
 char DRIVER_CalculateVoltageSaturated(Int8U Percent, Int8U LowSat, Int8U HighSat)
 {
 	Int16U t = ((Int16U)Percent) * DataTable[REG_DESIRED_VOLTAGE] / 100;
 	return DRIVER_ValueSaturate(t, LowSat, HighSat);
 }
+//-----------------------------
 
 Int16U DRIVER_ValueSaturate(Int16U Var, Int16U LowSat, Int16U HighSat)
 {
-	if (Var < LowSat)
+	if(Var < LowSat)
 		Var = LowSat;
-	else if (Var > HighSat)
+	else if(Var > HighSat)
 		Var = HighSat;
 	
 	return Var;
 }
+//-----------------------------
 
 void DRIVER_CacheVariables()
 {
@@ -57,56 +63,75 @@ void DRIVER_CacheVariables()
 	Correction = DRIVER_ValueSaturate(DataTable[REG_VOLTAGE_FINE_N], CAP_VF_N_MIN, CAP_VF_N_MAX);
 	DesiredVoltage = DRIVER_ValueSaturate(DataTable[REG_DESIRED_VOLTAGE], CAP_VOLTAGE_MIN, CAP_VOLTAGE_MAX);
 }
+//-----------------------------
 
-void DRIVER_SW_RateChannel(Int16U Voltage)
+void DRIVER_SelectVRateChannel(Int16U Channel)
 {
-	//
+	switch(Channel)
+	{
+		case VRATE_INDEX_LOW:
+			LL_VRateLow();
+			break;
+
+		case VRATE_INDEX_MID:
+			LL_VRateMid();
+			break;
+
+		default:
+			LL_VRateHigh();
+			break;
+	}
 }
+//-----------------------------
 
 void DRIVER_SetGateVoltage(Int16U Voltage)
 {
-	Int16U result = 0;
-	
-	//val = (Int16U)((float)Voltage / HIGH_RATE * ANALOG_REF_MV);
-	//result = (((Int16U)val) * GATE_V_N) / GATE_V_D;
-
 	// Saturate value
-	if(result > GATE_DAC_MAX) result = GATE_DAC_MAX;
-
+	if(Voltage > GATE_DAC_MAX)
+		Voltage = GATE_DAC_MAX;
+	
 	// Set gate voltage
-	DAC_SetValueCh1(DAC1, result);
+	DAC_SetValueCh1(DAC1, Voltage);
 }
+//-----------------------------
+
+void DRIVER_GatePrepare()
+{
+	DRIVER_SetGateVoltage(DataTable[REG_DESIRED_GATE_V]);
+	DRIVER_SelectVRateChannel(DataTable[REG_VRATE_RANGE]);
+}
+//-----------------------------
 
 void DRIVER_ControlRoutine()
 {
 	Int16U pwm_fb, ActualVoltage;
 	Int8U pwm_fb_sleep;
-
+	
 	float capV = MEASURE_GetBatteryVoltage();
 	DataTable[REG_ACTUAL_VOLTAGE] = (Int16U)capV;
 	ActualVoltage = capV;
-
+	
 	if(Active)
 	{
 		int err = DesiredVoltage - ActualVoltage;
 		
 		// Select proper PWM duty cycle
-		if (ActualVoltage < 200)
+		if(ActualVoltage < 200)
 		{
 			pwm_fb = FB_BASE_PWM_LOW;
 			pwm_fb_sleep = FB_BASE_PWM_IDLE;
 		}
-		else if (ActualVoltage < 400)
+		else if(ActualVoltage < 400)
 		{
 			pwm_fb = FB_BASE_PWM_LOW + FB_BASE_PWM_ZONE_SIZE;
 			pwm_fb_sleep = FB_BASE_PWM_IDLE;
 		}
-		else if (ActualVoltage < 600)
+		else if(ActualVoltage < 600)
 		{
 			pwm_fb = FB_BASE_PWM_LOW + FB_BASE_PWM_ZONE_SIZE * 2;
 			pwm_fb_sleep = FB_BASE_PWM_IDLE * 2;
 		}
-		else if (ActualVoltage < 800)
+		else if(ActualVoltage < 800)
 		{
 			pwm_fb = FB_BASE_PWM_LOW + FB_BASE_PWM_ZONE_SIZE * 3;
 			pwm_fb_sleep = FB_BASE_PWM_IDLE * 3;
@@ -118,26 +143,27 @@ void DRIVER_ControlRoutine()
 		}
 		
 		// Override startup PWM
-		if (ActualVoltage < 30) pwm_fb = FB_BASE_PWM_IDLE;
-
+		if(ActualVoltage < 30)
+			pwm_fb = FB_BASE_PWM_IDLE;
+		
 		if(err >= ErrorLimit)
 		{
 			// active charge zone
-			hystOn = TRUE;
+			hystOn = true;
 			FlybackPWMSet(pwm_fb);
 			BrakePWMSet(0);
 		}
 		else if(err <= -(ErrorLimit * 2))
 		{
 			// active discharge zone
-			hystOn = FALSE;
+			hystOn = false;
 			FlybackPWMSet(0);
 			BrakePWMSet(BRK_BASE_PWM);
 		}
 		else if(err <= -ErrorLimit)
 		{
 			// soft self-discharge zone
-			hystOn = FALSE;
+			hystOn = false;
 			FlybackPWMSet(0);
 			BrakePWMSet(0);
 		}
@@ -147,9 +173,9 @@ void DRIVER_ControlRoutine()
 			FlybackPWMSet(hystOn ? pwm_fb_sleep : 0);
 			BrakePWMSet(0);
 		}
-
-		DataTable[REG_VOLTAGE_OK] = (labs(err) < AcceptableWindow) ? 1 : 0;
-		Shutdown = FALSE;
+		
+		DataTable[REG_VOLTAGE_OK] = (abs(err) < AcceptableWindow) ? 1 : 0;
+		Shutdown = false;
 	}
 	else
 	{
@@ -157,19 +183,22 @@ void DRIVER_ControlRoutine()
 		{
 			FlybackPWMSet(0);
 			BrakePWMSet(BRK_TOP_PWM);
-
+			
 			DataTable[REG_VOLTAGE_OK] = 0;
-			Shutdown = TRUE;
+			Shutdown = true;
 		}
 	}
 }
+//-----------------------------
 
 void FlybackPWMSet(uint16_t PWM_Value)
 {
 	TIM15_16_17_PWM_CH1_SetValue(TIM15, PWM_Value);
 }
+//-----------------------------
 
 void BrakePWMSet(uint16_t PWM_Value)
 {
 	TIM15_16_17_PWM_CH1_SetValue(TIM16, PWM_Value);
 }
+//-----------------------------
