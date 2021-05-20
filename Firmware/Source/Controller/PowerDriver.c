@@ -83,12 +83,8 @@ void DRIVER_SelectVRateChannel(Int16U Channel)
 
 void DRIVER_SetGateVoltage(Int16U Voltage)
 {
-	// Saturate value
-	if(Voltage > GATE_DAC_MAX)
-		Voltage = GATE_DAC_MAX;
-	
-	// Set gate voltage
-	DAC_SetValueCh1(DAC1, Voltage);
+	Int16U DACValue = (Int16U)((float)Voltage / GATE_ANALOG_GAIN / ANALOG_REF_MV * ADC_DAC_RESOLUTION);
+	DAC_SetValueCh1(DAC1, (DACValue > ADC_DAC_RESOLUTION) ? ADC_DAC_RESOLUTION : DACValue);
 }
 //-----------------------------
 

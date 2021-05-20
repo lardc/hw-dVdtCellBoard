@@ -35,7 +35,7 @@ float MEASURE_GetRawAvgBatVolatge()
 
 float MEASURE_ConvertADCtoV(float RawInput)
 {
-	float Voltage = (RawInput / ADC_RESOLUTION * ANALOG_REF_MV) * CAP_V_CONV;
+	float Voltage = (RawInput / ADC_DAC_RESOLUTION * ANALOG_REF_MV) * CAP_V_CONV;
 	return (Voltage > 0) ? Voltage : 0;
 }
 //-----------------------------------------------

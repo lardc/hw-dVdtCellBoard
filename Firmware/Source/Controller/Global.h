@@ -14,9 +14,9 @@
 // TIM mask
 #define PWM_OUT_LOW_POL					0xFFFD
 
-// Capacitor voltage parameters
+// ADC & DAC settings
 #define ANALOG_REF_MV					3300	// (in mV)
-#define ADC_RESOLUTION					4095
+#define ADC_DAC_RESOLUTION				4095
 
 // Fine tuning
 #define CAP_V_CONV						0.319f
@@ -38,7 +38,7 @@
 #define BRK_BASE_PWM					200		// (in ticks)
 #define BRK_TOP_PWM						4095
 
-// DAC settings
-#define GATE_DAC_MAX					4095
+// Gate voltage settings
+#define GATE_ANALOG_GAIN				1.0f
 
 #endif // __GLOBAL_H
