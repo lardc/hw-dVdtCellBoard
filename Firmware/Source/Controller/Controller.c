@@ -72,11 +72,7 @@ static void CONTROL_FillDefault()
 	DataTable[REG_DESIRED_VOLTAGE] = CAP_VOLTAGE_MIN;
 	DataTable[REG_DESIRED_GATE_V] = 0;
 	
-	DataTable[REG_VOLTAGE_FINE_N] = (1 << CAP_VF_RSHIFT);
-	
-	DataTable[REG_ADC_VBAT_OFFSET] = 65534;
-	DataTable[REG_ADC_VBAT_N] = 319;
-	DataTable[REG_ADC_VBAT_D] = 1000;
+	DataTable[REG_VOLTAGE_FINE_N] = 1 << CAP_VF_RSHIFT;
 }
 //-----------------------------
 

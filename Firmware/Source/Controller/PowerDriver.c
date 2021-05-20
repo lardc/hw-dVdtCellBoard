@@ -81,9 +81,8 @@ void DRIVER_ControlRoutine()
 {
 	Int16U pwm_fb, ActualVoltage;
 	Int8U pwm_fb_sleep;
-	float capV;
 
-	capV = MEASURE_SingleSampleBatteryVoltage();
+	float capV = MEASURE_GetBatteryVoltage();
 	DataTable[REG_ACTUAL_VOLTAGE] = (Int16U)capV;
 	ActualVoltage = capV;
 
@@ -157,7 +156,7 @@ void DRIVER_ControlRoutine()
 		if(!Shutdown)
 		{
 			FlybackPWMSet(0);
-			BrakePWMSet(PWM_TOP_LOW);
+			BrakePWMSet(BRK_TOP_PWM);
 
 			DataTable[REG_VOLTAGE_OK] = 0;
 			Shutdown = TRUE;

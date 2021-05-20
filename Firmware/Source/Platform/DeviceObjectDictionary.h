@@ -14,10 +14,10 @@
 #define ACT_DIAG_SET_PWM_BRK		111	// Set PWM duty on Brake
 #define ACT_DIAG_SET_GATE_V			112	// Set gate control voltage
 #define ACT_DIAG_UPDATE_PWM_FREQ	113	// Set alternative PWM frequency
-#define ACT_DIAG_SW_LOW_RATE		114	//
-#define ACT_DIAG_SW_MID_RATE		115	//
-#define ACT_DIAG_SW_HIGH_RATE		116	//
-#define ACT_DIAG_SW_OFF_RATE		117	//
+#define ACT_DIAG_SW_LOW_RATE		114
+#define ACT_DIAG_SW_MID_RATE		115
+#define ACT_DIAG_SW_HIGH_RATE		116
+#define ACT_DIAG_SW_OFF_RATE		117
 
 // REGISTERS
 //
@@ -33,17 +33,13 @@
 #define REG_VOLTAGE_OK				14	// Charged flag
 #define REG_ACTUAL_VOLTAGE			15	// Actual capacitor level
 //
-#define REG_ADC_VBAT_OFFSET			17	// Смещение пересчёта оцифровки напряжения
-#define REG_ADC_VBAT_N				18	// Коэффициент пересчёта оцифровки напряжения, числитель
-#define REG_ADC_VBAT_D				19	// Коэффициент пересчёта оцифровки напряжения, знаменатель
-//
 #define REG_DIAG_PWM_FB				20	// Flyback PWM duty (diagnostics)
 #define REG_DIAG_PWM_BRK			21	// Brake PWM duty (diagnostics)
 #define REG_DIAG_PWM_FREQ			22	// Update PWM frequency (diagnostics)
 
 // FAULT CODES
 //
-#define FAULT_NONE					0	// No fault
+#define FAULT_NONE					0
 
 // WARNING CODES
 //
@@ -58,6 +54,5 @@
 #define ERR_NONE					0	// No error
 #define ERR_OPERATION_BLOCKED		2	// Operation can't be done due to current device state
 #define ERR_DEVICE_NOT_READY		3	// Device isn't ready to switch state
-
 
 #endif // __DEV_OBJ_DIC_H

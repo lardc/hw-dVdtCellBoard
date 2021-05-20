@@ -21,6 +21,7 @@
 #define ADC_RESOLUTION					4095
 
 // Fine tuning
+#define CAP_V_CONV						0.319f
 #define CAP_VF_N_MAX					1300
 #define CAP_VF_N_MIN					700
 #define CAP_VF_RSHIFT					10		// div 1024
@@ -33,13 +34,14 @@
 #define CAP_V_WINDOW_MIN_V				5		// Acceptance window min (in V)
 #define CAP_V_WINDOW_MAX_V				15		// Acceptance window max (in V)
 
-// Duty part/PWM_TOP
+// Duty part
 #define FB_BASE_PWM_HIGH				500		// (in ticks)
 #define FB_BASE_PWM_LOW					200		// (in ticks)
 #define FB_BASE_PWM_IDLE				50		// 50 is about 1us (in ticks)
 #define FB_BASE_PWM_ZONES				5		// Number of PWM zones
 #define FB_BASE_PWM_ZONE_SIZE			((FB_BASE_PWM_HIGH - FB_BASE_PWM_LOW) / (FB_BASE_PWM_ZONES - 1))
 #define BRK_BASE_PWM					200		// (in ticks)
+#define BRK_TOP_PWM						4095
 
 // DAC settings
 #define GATE_DAC_MAX					4095

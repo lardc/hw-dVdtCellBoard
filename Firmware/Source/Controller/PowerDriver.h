@@ -2,15 +2,7 @@
 #define __CAP_MON_H
 
 // Include
-#include "../stdinc.h"
-//
-#include "Global.h"
-
-
-// Define
-//
-#define PWM_TOP_LOW				0xfff				// 4095 - results in about 16kHz PWM frequency
-//
+#include "stdinc.h"
 
 // Functions
 //
