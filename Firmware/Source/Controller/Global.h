@@ -39,6 +39,6 @@
 #define BRK_TOP_PWM						4095
 
 // Gate voltage settings
-#define GATE_ANALOG_GAIN				1.0f
+#define GATE_ANALOG_GAIN				1.42f
 
 #endif // __GLOBAL_H
