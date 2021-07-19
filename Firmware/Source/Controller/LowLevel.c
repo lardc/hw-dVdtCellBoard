@@ -22,15 +22,16 @@ void LL_ExternalLED(bool State)
 
 void LL_CurrentLimitEnable(bool State)
 {
-	GPIO_SetState(GPIO_I_LIM, !State);
+	GPIO_SetState(GPIO_I_LIM, State);
 }
 //-----------------------------
 
+
 void LL_VRateSelect(bool LowEnable, bool MidEnable, bool HighEnable)
 {
-	GPIO_SetState(GPIO_LOW_VRATE, LowEnable);
-	GPIO_SetState(GPIO_MID_VRATE, MidEnable);
-	GPIO_SetState(GPIO_HIGH_VRATE, HighEnable);
+	GPIO_SetState(GPIO_LOW_VRATE, !LowEnable);
+	GPIO_SetState(GPIO_MID_VRATE, !MidEnable);
+	GPIO_SetState(GPIO_HIGH_VRATE, !HighEnable);
 }
 //-----------------------------
 
