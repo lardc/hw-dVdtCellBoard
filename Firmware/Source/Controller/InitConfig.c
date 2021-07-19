@@ -49,7 +49,7 @@ void INITCFG_ConfigIO()
 	
 	// Альтернативные функции
 	GPIO_InitAltFunction(GPIO_ALT_UART_RX, AltFn_7);
-	GPIO_InitAltFunction(GPIO_ALT_UART_TX, AltFn_7);
+	GPIO_InitOpenDrainAltFunction(GPIO_ALT_UART_TX, AltFn_7, NoPull);
 	GPIO_InitAltFunction(GPIO_ALT_PWM_FB, AltFn_9);
 	GPIO_InitAltFunction(GPIO_ALT_PWM_BRAKE, AltFn_1);
 }
