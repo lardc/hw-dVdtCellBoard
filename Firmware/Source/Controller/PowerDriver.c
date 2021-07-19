@@ -144,7 +144,7 @@ void DRIVER_ControlRoutine()
 			// active charge zone
 			hystOn = true;
 			FlybackPWMSet(pwm_fb);
-			BrakePWMSet(0);
+			BrakePWMSet(BRK_TOP_PWM);
 		}
 		else if(err <= -(ErrorLimit * 2))
 		{
@@ -158,13 +158,13 @@ void DRIVER_ControlRoutine()
 			// soft self-discharge zone
 			hystOn = false;
 			FlybackPWMSet(0);
-			BrakePWMSet(0);
+			BrakePWMSet(BRK_TOP_PWM);
 		}
 		else
 		{
 			// soft charge zone
 			FlybackPWMSet(hystOn ? pwm_fb_sleep : 0);
-			BrakePWMSet(0);
+			BrakePWMSet(BRK_TOP_PWM);
 		}
 		
 		DataTable[REG_VOLTAGE_OK] = (abs(err) < AcceptableWindow) ? 1 : 0;
@@ -175,7 +175,7 @@ void DRIVER_ControlRoutine()
 		if(!Shutdown)
 		{
 			FlybackPWMSet(0);
-			BrakePWMSet(BRK_TOP_PWM);
+			BrakePWMSet(0);
 			
 			DataTable[REG_VOLTAGE_OK] = 0;
 			Shutdown = true;
