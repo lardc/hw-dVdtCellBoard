@@ -35,7 +35,7 @@
 #define FB_BASE_PWM_IDLE				50		// 50 is about 1us (in ticks)
 #define FB_BASE_PWM_ZONES				5		// Number of PWM zones
 #define FB_BASE_PWM_ZONE_SIZE			((FB_BASE_PWM_HIGH - FB_BASE_PWM_LOW) / (FB_BASE_PWM_ZONES - 1))
-#define BRK_BASE_PWM					200		// (in ticks)
+#define BRK_BASE_PWM					3890	// (in ticks)
 #define BRK_TOP_PWM						4095
 
 // Gate voltage settings
