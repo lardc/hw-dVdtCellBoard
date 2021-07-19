@@ -25,9 +25,9 @@ GPIO_PortPinSettingMacro GPIO_SYNC_IN	  	= {GPIOB, Pin_0};
 GPIO_PortPinSettingMacro GPIO_I_LIM			= {GPIOA, Pin_5};
 GPIO_PortPinSettingMacro GPIO_LED1	 	 	= {GPIOA, Pin_15};
 GPIO_PortPinSettingMacro GPIO_LED2	 	 	= {GPIOB, Pin_4};
-GPIO_PortPinSettingMacro GPIO_LOW_VRATE		= {GPIOB, Pin_12};
-GPIO_PortPinSettingMacro GPIO_MID_VRATE	 	= {GPIOB, Pin_15};
-GPIO_PortPinSettingMacro GPIO_HIGH_VRATE	= {GPIOA, Pin_10};
+GPIO_PortPinSettingMacro GPIO_LOW_VRATE		= {GPIOB, Pin_15};
+GPIO_PortPinSettingMacro GPIO_MID_VRATE	 	= {GPIOA, Pin_9};
+GPIO_PortPinSettingMacro GPIO_HIGH_VRATE	= {GPIOA, Pin_11};
 
 // Определения для портов альтернативных функций
 GPIO_PortPinSettingMacro GPIO_ALT_UART_RX 	= {GPIOB, Pin_7};
