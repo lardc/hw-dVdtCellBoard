@@ -14,13 +14,13 @@
 //
 volatile long CONTROL_TimeCounter = 0;
 volatile DeviceState CONTROL_State = DS_None;
+volatile DeviceSubState CONTROL_SubState = SDS_None;
 static volatile Boolean Locked = false;
 static Boolean CycleActive = false;
 
 // Forward functions
 //
 static void CONTROL_ApplyParameters();
-static void CONTROL_SetDeviceState(DeviceState NewState);
 static void CONTROL_FillDefault();
 static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U UserError);
 
@@ -52,11 +52,15 @@ static void CONTROL_ApplyParameters()
 {
 	DRIVER_GatePrepare();
 	DRIVER_CacheVariables();
+	LL_CurrentLimitEnable(false);
+
+	CONTROL_SetDeviceState(DS_Powered, SDS_WaitSync);
 }
 //-----------------------------
 
-static void CONTROL_SetDeviceState(DeviceState NewState)
+void CONTROL_SetDeviceState(DeviceState NewState, DeviceSubState NewSubState)
 {
+	CONTROL_SubState = NewSubState;
 	CONTROL_State = NewState;
 	DataTable[REG_DEV_STATE] = NewState;
 }
@@ -82,13 +86,13 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U UserError)
 			DataTable[REG_DESIRED_VOLTAGE] = CAP_VOLTAGE_MIN;
 			DataTable[REG_DESIRED_GATE_V] = 0;
 			CONTROL_ApplyParameters();
-			CONTROL_SetDeviceState(DS_Powered);
+			CONTROL_SetDeviceState(DS_Powered, SDS_None);
 			DRIVER_SetMode(true);
 			break;
 			
 		case ACT_DISABLE_POWER:
 			DRIVER_SetMode(false);
-			CONTROL_SetDeviceState(DS_None);
+			CONTROL_SetDeviceState(DS_None, SDS_None);
 			break;
 			
 		case ACT_DIAG_SET_PWM_FB:
@@ -124,7 +128,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U UserError)
 			
 		case ACT_CLR_FAULT:
 			if(CONTROL_State == DS_Fault)
-				CONTROL_SetDeviceState(DS_None);
+				CONTROL_SetDeviceState(DS_None, SDS_None);
 			DataTable[REG_FAULT_REASON] = FAULT_NONE;
 			break;
 			

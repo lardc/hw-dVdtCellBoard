@@ -17,12 +17,20 @@ typedef enum __DeviceState
 	DS_Powered		= 3
 } DeviceState;
 
+typedef enum __DeviceSubState
+{
+	SDS_None				= 0,
+	SDS_WaitSync			= 1,
+	SDS_RiseEdgeDetected 	= 2
+} DeviceSubState;
+
 
 // Variables
 //
 extern volatile long CONTROL_TimeCounterTemp;
 extern volatile long CONTROL_TimeCounter;
 extern volatile DeviceState CONTROL_State;
+extern volatile DeviceSubState CONTROL_SubState;
 
 
 // Functions
@@ -33,5 +41,7 @@ void CONTROL_Init();
 void CONTROL_Cycle();
 // Update low-priority states
 void CONTROL_Idle();
+// Set device state
+void CONTROL_SetDeviceState(DeviceState NewState, DeviceSubState NewSubState);
 
 #endif /* CONTROLLER_H_ */

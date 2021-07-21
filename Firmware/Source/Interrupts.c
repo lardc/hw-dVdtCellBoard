@@ -10,16 +10,24 @@
 //
 void EXTI0_IRQHandler()
 {
-	if(!(GPIO_GetState(GPIO_SYNC_IN)))
+	if(!GPIO_GetState(GPIO_SYNC_IN) && CONTROL_SubState == SDS_WaitSync)
 	{
 		LL_ExternalLED(true);
 		TIM_Start(TIM7);
+
+		CONTROL_SetDeviceState(DS_Powered, SDS_RiseEdgeDetected);
 	}
 	else
 	{
-		LL_ExternalLED(false);
-		LL_CurrentLimitEnable(false);
+		if(GPIO_GetState(GPIO_SYNC_IN) && CONTROL_SubState == SDS_RiseEdgeDetected)
+		{
+			LL_ExternalLED(false);
+			LL_CurrentLimitEnable(false);
+
+			CONTROL_SetDeviceState(DS_Powered, SDS_WaitSync);
+		}
 	}
+
 	EXTI_FlagReset(EXTI_0);
 }
 //-----------------------------------------
