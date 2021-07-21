@@ -35,7 +35,7 @@ void INITCFG_ConfigIO()
 	GPIO_InitAnalog(GPIO_DAC_V);
 	
 	// Цифровые входы
-	GPIO_InitInput(GPIO_SYNC_IN, NoPull);
+	GPIO_InitInput(GPIO_SYNC_IN, Pull_Up);
 	
 	// Выходы
 	GPIO_InitPushPullOutput(GPIO_I_LIM);
