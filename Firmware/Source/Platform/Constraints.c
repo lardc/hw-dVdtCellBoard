@@ -33,7 +33,7 @@ const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START]
 	{0, 0, 0},																	// 17
 	{0, 0, 0},																	// 18
 	{0, 0, 0},																	// 19
-	{0, 0, 0},																	// 20
+	{0, INT16U_MAX, 0},															// 20
 	{0, INT16U_MAX, 0},															// 21
 	{0, INT16U_MAX, 0},															// 22
 	{0, INT16U_MAX, 0},															// 23
