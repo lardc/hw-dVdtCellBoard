@@ -19,7 +19,7 @@
 #define ADC_DAC_RESOLUTION				4095
 
 // Fine tuning
-#define CAP_V_CONV						0.319f
+#define CAP_V_CONV						0.332f
 
 // Regulator parameters
 #define CAP_V_DEADZONE					2		// Regulator dead zone (in %)
@@ -30,13 +30,13 @@
 #define CAP_V_WINDOW_MAX_V				15		// Acceptance window max (in V)
 
 // Duty part
-#define FB_BASE_PWM_HIGH				500		// (in ticks)
-#define FB_BASE_PWM_LOW					200		// (in ticks)
-#define FB_BASE_PWM_IDLE				50		// 50 is about 1us (in ticks)
-#define FB_BASE_PWM_ZONES				5		// Number of PWM zones
+#define FB_BASE_PWM_HIGH				150		// (in ticks)
+#define FB_BASE_PWM_LOW					20		// (in ticks)
+#define FB_BASE_PWM_IDLE				10		// 50 is about 1us (in ticks)
+#define FB_BASE_PWM_ZONES				3		// Number of PWM zones
 #define FB_BASE_PWM_ZONE_SIZE			((FB_BASE_PWM_HIGH - FB_BASE_PWM_LOW) / (FB_BASE_PWM_ZONES - 1))
-#define BRK_BASE_PWM					3890	// (in ticks)
-#define BRK_TOP_PWM						4095
+#define BRK_BASE_PWM					15000	// (in ticks)
+#define BRK_TOP_PWM						0
 
 // Gate voltage settings
 #define GATE_ANALOG_GAIN				1.42f

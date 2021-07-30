@@ -19,8 +19,8 @@
 static bool Shutdown = false;
 static volatile bool Active = false;
 static volatile bool hystOn = false;
-static char ErrorLimit, AcceptableWindow;
-static Int16U DesiredVoltage;
+static float ErrorLimit, AcceptableWindow;
+static float DesiredVoltage;
 
 // Forward functions
 char DRIVER_CalculateVoltageSaturated(Int8U Percent, Int8U LowSat, Int8U HighSat);
