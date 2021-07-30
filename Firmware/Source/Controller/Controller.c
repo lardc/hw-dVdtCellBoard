@@ -13,6 +13,7 @@
 // Variables
 //
 volatile long CONTROL_TimeCounter = 0;
+volatile long AfterPulseTimeout = 0;
 volatile DeviceState CONTROL_State = DS_None;
 volatile DeviceSubState CONTROL_SubState = SDS_None;
 static volatile Boolean Locked = false;
@@ -145,5 +146,18 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U UserError)
 	}
 	
 	return true;
+}
+//-----------------------------
+
+void CONTROL_AfterPulseProcess()
+{
+	if(AfterPulseTimeout && (CONTROL_TimeCounter > AfterPulseTimeout))
+	{
+		AfterPulseTimeout = 0;
+
+		LL_ExternalLED(false);
+		LL_CurrentLimitEnable(false);
+		CONTROL_SetDeviceState(DS_Powered, SDS_WaitSync);
+	}
 }
 //-----------------------------

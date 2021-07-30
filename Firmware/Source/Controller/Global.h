@@ -10,6 +10,7 @@
 #define EP_COUNT						0		// Количество массивов для чтения
 #define ENABLE_LOCKING					FALSE
 #define LED_BLINK_TIME					500		// (in ms)
+#define AFTER_PULSE_TIMEOUT				500		// (in ms)
 
 // TIM mask
 #define PWM_OUT_LOW_POL					0xFFFD
@@ -22,7 +23,7 @@
 #define CAP_V_CONV						0.332f
 
 // Regulator parameters
-#define CAP_V_DEADZONE					2		// Regulator dead zone (in %)
+#define CAP_V_DEADZONE					0.5		// Regulator dead zone (in %)
 #define CAP_V_DEADZONE_MIN_V			3		// Regulator dead zone min (in V)
 #define CAP_V_DEADZONE_MAX_V			10		// Regulator dead zone max (in V)
 #define CAP_V_WINDOW					3		// Acceptance window (in %)

@@ -20,12 +20,7 @@ void EXTI0_IRQHandler()
 	else
 	{
 		if(GPIO_GetState(GPIO_SYNC_IN) && CONTROL_SubState == SDS_RiseEdgeDetected)
-		{
-			LL_ExternalLED(false);
-			LL_CurrentLimitEnable(false);
-
-			CONTROL_SetDeviceState(DS_Powered, SDS_WaitSync);
-		}
+			AfterPulseTimeout = CONTROL_TimeCounter + AFTER_PULSE_TIMEOUT;
 	}
 
 	EXTI_FlagReset(EXTI_0);
@@ -62,6 +57,7 @@ void TIM3_IRQHandler()
 		
 		ADC_SamplingStart(ADC1);
 		CONTROL_Cycle();
+		CONTROL_AfterPulseProcess();
 		TIM_StatusClear(TIM3);
 	}
 }

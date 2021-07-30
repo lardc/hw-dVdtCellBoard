@@ -31,6 +31,7 @@ extern volatile long CONTROL_TimeCounterTemp;
 extern volatile long CONTROL_TimeCounter;
 extern volatile DeviceState CONTROL_State;
 extern volatile DeviceSubState CONTROL_SubState;
+extern volatile long AfterPulseTimeout;
 
 
 // Functions
@@ -43,5 +44,7 @@ void CONTROL_Cycle();
 void CONTROL_Idle();
 // Set device state
 void CONTROL_SetDeviceState(DeviceState NewState, DeviceSubState NewSubState);
+// After pulse process
+void CONTROL_AfterPulseProcess();
 
 #endif /* CONTROLLER_H_ */
