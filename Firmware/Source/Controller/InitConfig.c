@@ -130,14 +130,16 @@ void INITCFG_ConfigPWM()
 {
 	//PA2 - Flyback PWM
 	TIM_Clock_En(TIM_15);
-	TIM15_16_17_PWM_CH1_Config(TIM15, SYSCLK, TIMER15_uS);
-	TIM15->CCER &= PWM_OUT_LOW_POL;
+	TIM_Config(TIM15, SYSCLK, TIMER15_uS);
+	TIMx_PWM_ConfigChannel(TIM15, TIMx_CHANNEL1);
+	TIMx_PWM_SetPolarity(TIM15, TIMx_CHANNEL1, false);
 	TIM_Start(TIM15);
 	
 	//PA6 - Brake PWM
 	TIM_Clock_En(TIM_16);
-	TIM15_16_17_PWM_CH1_Config(TIM16, SYSCLK, TIMER16_uS);
-	TIM16->CCER &= PWM_OUT_LOW_POL;
+	TIM_Config(TIM16, SYSCLK, TIMER16_uS);
+	TIMx_PWM_ConfigChannel(TIM16, TIMx_CHANNEL1);
+	TIMx_PWM_SetPolarity(TIM16, TIMx_CHANNEL1, true);
 	TIM_Start(TIM16);
 }
 //------------------------------------------------------------------------------

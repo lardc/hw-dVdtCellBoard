@@ -186,12 +186,12 @@ void DRIVER_ControlRoutine()
 
 void FlybackPWMSet(uint16_t PWM_Value)
 {
-	TIM15_16_17_PWM_CH1_SetValue(TIM15, PWM_Value);
+	TIMx_PWM_SetValue(TIM15, TIMx_CHANNEL1, PWM_Value);
 }
 //-----------------------------
 
 void BrakePWMSet(uint16_t PWM_Value)
 {
-	TIM15_16_17_PWM_CH1_SetValue(TIM16, PWM_Value);
+	TIMx_PWM_SetValue(TIM16, TIMx_CHANNEL1, PWM_Value);
 }
 //-----------------------------
