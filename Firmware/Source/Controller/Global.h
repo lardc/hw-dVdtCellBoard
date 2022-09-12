@@ -34,7 +34,7 @@
 #define FB_BASE_PWM_HIGH				150		// (in ticks)
 #define FB_BASE_PWM_LOW					20		// (in ticks)
 #define FB_BASE_PWM_IDLE				10		// 50 is about 1us (in ticks)
-#define FB_BASE_PWM_ZONES				3		// Number of PWM zones
+#define FB_BASE_PWM_ZONES				5		// Number of PWM zones
 #define FB_BASE_PWM_ZONE_SIZE			((FB_BASE_PWM_HIGH - FB_BASE_PWM_LOW) / (FB_BASE_PWM_ZONES - 1))
 #define BRK_BASE_PWM					15000	// (in ticks)
 #define BRK_TOP_PWM						0
