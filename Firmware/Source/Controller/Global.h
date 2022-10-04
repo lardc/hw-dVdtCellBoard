@@ -36,8 +36,9 @@
 #define FB_BASE_PWM_IDLE				10		// 50 is about 1us (in ticks)
 #define FB_BASE_PWM_ZONES				5		// Number of PWM zones
 #define FB_BASE_PWM_ZONE_SIZE			((FB_BASE_PWM_HIGH - FB_BASE_PWM_LOW) / (FB_BASE_PWM_ZONES - 1))
-#define BRK_BASE_PWM					15000	// (in ticks)
-#define BRK_TOP_PWM						0
+#define BRK_LOW_PWM						25000	// (in ticks) для полного разряда
+#define BRK_BASE_PWM					15000	// (in ticks) для поддержания напряжения более низкого
+#define BRK_TOP_PWM						0		// отключение разряжающей цепочки от конденсатора
 
 // Gate voltage settings
 #define GATE_ANALOG_GAIN				1.42f
