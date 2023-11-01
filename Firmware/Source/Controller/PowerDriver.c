@@ -1,4 +1,4 @@
-// Includes
+﻿// Includes
 #include "PowerDriver.h"
 //
 #include <stdlib.h>
@@ -11,9 +11,9 @@
 #include "LowLevel.h"
 
 // Definitions
-#define VRATE_INDEX_LOW		1
-#define VRATE_INDEX_MID		2
-#define VRATE_INDEX_HIGH	0
+#define VRATE_INDEX_LOW		0
+#define VRATE_INDEX_MID		1
+#define VRATE_INDEX_HIGH	2
 
 // Variables
 static bool Shutdown = false;
@@ -74,8 +74,11 @@ void DRIVER_SelectVRateChannel(Int16U Channel)
 			LL_VRateMid();
 			break;
 
-		default:
+		case VRATE_INDEX_HIGH:
 			LL_VRateHigh();
+			break;
+
+		default:
 			break;
 	}
 }
@@ -175,7 +178,7 @@ void DRIVER_ControlRoutine()
 		if(!Shutdown)
 		{
 			FlybackPWMSet(0);
-			BrakePWMSet(0);
+			BrakePWMSet(BRK_LOW_PWM);
 			
 			DataTable[REG_VOLTAGE_OK] = 0;
 			Shutdown = true;

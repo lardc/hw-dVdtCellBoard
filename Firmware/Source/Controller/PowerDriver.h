@@ -1,4 +1,4 @@
-#ifndef __CAP_MON_H
+﻿#ifndef __CAP_MON_H
 #define __CAP_MON_H
 
 // Include

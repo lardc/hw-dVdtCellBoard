@@ -1,4 +1,4 @@
-#include "InitConfig.h"
+п»ї#include "InitConfig.h"
 #include "Board.h"
 #include "SysConfig.h"
 #include "Controller.h"
@@ -26,18 +26,18 @@ void INITCFG_ConfigEI()
 
 void INITCFG_ConfigIO()
 {
-	// Включение тактирования портов
+	// Р’РєР»СЋС‡РµРЅРёРµ С‚Р°РєС‚РёСЂРѕРІР°РЅРёСЏ РїРѕСЂС‚РѕРІ
 	RCC_GPIO_Clk_EN(PORTA);
 	RCC_GPIO_Clk_EN(PORTB);
 	
-	// Аналоговые порты
+	// РђРЅР°Р»РѕРіРѕРІС‹Рµ РїРѕСЂС‚С‹
 	GPIO_InitAnalog(GPIO_MEASURE_V);
 	GPIO_InitAnalog(GPIO_DAC_V);
 	
-	// Цифровые входы
+	// Р¦РёС„СЂРѕРІС‹Рµ РІС…РѕРґС‹
 	GPIO_InitInput(GPIO_SYNC_IN, Pull_Up);
 	
-	// Выходы
+	// Р’С‹С…РѕРґС‹
 	GPIO_InitPushPullOutput(GPIO_I_LIM);
 	GPIO_InitPushPullOutput(GPIO_LED1);
 	GPIO_InitPushPullOutput(GPIO_LED2);
@@ -47,7 +47,7 @@ void INITCFG_ConfigIO()
 	
 	GPIO_SetState(GPIO_I_LIM, true);
 	
-	// Альтернативные функции
+	// РђР»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹Рµ С„СѓРЅРєС†РёРё
 	GPIO_InitAltFunction(GPIO_ALT_UART_RX, AltFn_7);
 	GPIO_InitOpenDrainAltFunction(GPIO_ALT_UART_TX, AltFn_7, NoPull);
 	GPIO_InitAltFunction(GPIO_ALT_PWM_FB, AltFn_9);
@@ -83,7 +83,7 @@ void INITCFG_ConfigDMA()
 {
 	DMA_Clk_Enable(DMA1_ClkEN);
 	
-	// DMA для АЦП напряжения батареи
+	// DMA РґР»СЏ РђР¦Рџ РЅР°РїСЂСЏР¶РµРЅРёСЏ Р±Р°С‚Р°СЂРµРё
 	DMA_Reset(DMA_ADC_V_BAT_CHANNEL);
 	DMAChannelX_Config(DMA_ADC_V_BAT_CHANNEL, DMA_MEM2MEM_DIS, DMA_LvlPriority_LOW, DMA_MSIZE_16BIT, DMA_PSIZE_16BIT,
 			DMA_MINC_EN, DMA_PINC_DIS, DMA_CIRCMODE_EN, DMA_READ_FROM_PERIPH);

@@ -1,4 +1,4 @@
-#ifndef __BOARD_H
+п»ї#ifndef __BOARD_H
 #define __BOARD_H
 
 #include "Delay.h"
@@ -16,11 +16,11 @@
 #include "ZwIWDG.h"
 #include "ZwNFLASH.h"
 
-//Определения для аналоговых портов
-GPIO_PortPinSettingMacro GPIO_MEASURE_V 	= {GPIOA, Pin_0};	// Напряжение на выходе обратноходного ИП
-GPIO_PortPinSettingMacro GPIO_DAC_V 		= {GPIOA, Pin_4};	// ЦАП - задание
+//РћРїСЂРµРґРµР»РµРЅРёСЏ РґР»СЏ Р°РЅР°Р»РѕРіРѕРІС‹С… РїРѕСЂС‚РѕРІ
+GPIO_PortPinSettingMacro GPIO_MEASURE_V 	= {GPIOA, Pin_0};	// РќР°РїСЂСЏР¶РµРЅРёРµ РЅР° РІС‹С…РѕРґРµ РѕР±СЂР°С‚РЅРѕС…РѕРґРЅРѕРіРѕ РРџ
+GPIO_PortPinSettingMacro GPIO_DAC_V 		= {GPIOA, Pin_4};	// Р¦РђРџ - Р·Р°РґР°РЅРёРµ
 
-// Определения для входных/выходных портов
+// РћРїСЂРµРґРµР»РµРЅРёСЏ РґР»СЏ РІС…РѕРґРЅС‹С…/РІС‹С…РѕРґРЅС‹С… РїРѕСЂС‚РѕРІ
 GPIO_PortPinSettingMacro GPIO_SYNC_IN	  	= {GPIOB, Pin_0};
 GPIO_PortPinSettingMacro GPIO_I_LIM			= {GPIOA, Pin_5};
 GPIO_PortPinSettingMacro GPIO_LED1	 	 	= {GPIOA, Pin_15};
@@ -29,7 +29,7 @@ GPIO_PortPinSettingMacro GPIO_LOW_VRATE		= {GPIOB, Pin_15};
 GPIO_PortPinSettingMacro GPIO_MID_VRATE	 	= {GPIOA, Pin_9};
 GPIO_PortPinSettingMacro GPIO_HIGH_VRATE	= {GPIOA, Pin_11};
 
-// Определения для портов альтернативных функций
+// РћРїСЂРµРґРµР»РµРЅРёСЏ РґР»СЏ РїРѕСЂС‚РѕРІ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹С… С„СѓРЅРєС†РёР№
 GPIO_PortPinSettingMacro GPIO_ALT_UART_RX 	= {GPIOB, Pin_7};
 GPIO_PortPinSettingMacro GPIO_ALT_UART_TX	= {GPIOB, Pin_6};
 GPIO_PortPinSettingMacro GPIO_ALT_PWM_FB  	= {GPIOA, Pin_2};
