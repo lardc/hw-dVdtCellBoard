@@ -11,9 +11,9 @@
 #include "LowLevel.h"
 
 // Definitions
-#define VRATE_INDEX_LOW		0
-#define VRATE_INDEX_MID		1
-#define VRATE_INDEX_HIGH	2
+#define VRATE_INDEX_LOW		1
+#define VRATE_INDEX_MID		2
+#define VRATE_INDEX_HIGH	0
 
 // Variables
 static bool Shutdown = false;
