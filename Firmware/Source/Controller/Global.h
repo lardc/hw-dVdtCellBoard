@@ -20,7 +20,8 @@
 #define ADC_DAC_RESOLUTION				4095
 
 // Fine tuning
-#define CAP_V_CONV						0.332f
+#define CAP_V_CONV_K					0.332f
+#define CAP_V_CONV_OFFSET				15.0f
 
 // Regulator parameters
 #define CAP_V_DEADZONE					0.5		// Regulator dead zone (in %)
